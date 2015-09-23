@@ -1,0 +1,84 @@
+{
+    "name": "mpoiriert/symfony-draw-api",
+    "type": "project",
+    "description": "Project base for api using draw bundles on symfony",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-0": { "": "src/", "SymfonyStandard": "app/" }
+    },
+
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/mpoiriert/GeocodableBehavior"
+        }
+    ],
+
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/symfony": "~2.5",
+        "twig/extensions": "~1.0",
+        "symfony/assetic-bundle": "~2.3",
+        "symfony/swiftmailer-bundle": "~2.3",
+        "symfony/monolog-bundle": "~2.4",
+        "sensio/distribution-bundle": "~3.0",
+        "sensio/framework-extra-bundle": "~3.0",
+        "incenteev/composer-parameter-handler": "~2.0",
+        "friendsofsymfony/rest-bundle": "1.4.*",
+        "nelmio/api-doc-bundle": "2.5.*",
+        "jms/serializer-bundle": "@stable",
+        "doctrine/orm": "~2.2,>=2.2.3",
+        "doctrine/doctrine-bundle": "dev-master",
+        "doctrine/doctrine-migrations-bundle": "~1.0",
+        "nelmio/cors-bundle": "~1.3.2",
+        "lexik/jwt-authentication-bundle": "~1.0.0",
+        "willdurand/faker-bundle": "@stable",
+        "gfreeau/get-jwt-bundle": "dev-master",
+        "doctrine/annotations": "*",
+        "sensio/generator-bundle": "~2.3",
+        "jms/serializer": "@stable",
+        "phpdocumentor/reflection-docblock": "@stable",
+        "draw/swagger-bundle": "dev-master",
+        "draw/draw-bundle": "dev-master",
+        "knplabs/knp-gaufrette-bundle": "@stable",
+        "willdurand/geocoder-bundle": "~3.0",
+        "beberlei/DoctrineExtensions": "@stable",
+        "knplabs/doctrine-behaviors": "~1.1",
+        "hwi/oauth-bundle": "~0.4.0@dev"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.1.*"
+    },
+    "scripts": {
+        "post-root-package-install": [
+            "SymfonyStandard\\Composer::hookRootPackageInstall"
+        ],
+        "post-install-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles"
+        ],
+        "post-update-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles"
+        ]
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "extra": {
+        "symfony-app-dir": "app",
+        "symfony-web-dir": "web",
+        "incenteev-parameters": {
+            "file": "app/config/parameters.yml"
+        }
+    }
+}

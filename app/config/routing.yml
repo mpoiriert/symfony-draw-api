@@ -1,0 +1,7 @@
+draw_swagger:
+    resource: "@DrawSwaggerBundle/Resources/config/routing.yml"
+    prefix:   /
+
+draw_demo:
+    resource: "@DrawDemoBundle/Resources/config/routing.yml"
+    prefix: /api/draw-demo

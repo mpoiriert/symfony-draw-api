@@ -1,0 +1,168 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Documentation for the Draw Demo Bundle",
+        "description": "This is a base project using draw bundles and other common bundles to build api",
+        "termsOfService": "N\\A",
+        "version": "1.0"
+    },
+    "paths": {
+        "\/api\/draw-demo\/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Find use by their username.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "username",
+                        "description": "The user username you are looking for",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "name": "exactMatch",
+                        "description": "If you want to find a username by it's exact match",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "$ref": "#\/definitions\/DrawDemoUser?0"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Create a user",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#\/definitions\/DrawDemoUser?1"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#\/definitions\/DrawDemoUser?0"
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/draw-demo\/users\/{id}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get a user by it's id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#\/definitions\/DrawDemoUser?0"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Allow to edit you information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "id",
+                        "in": "path"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#\/definitions\/DrawDemoUser?2"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#\/definitions\/DrawDemoUser?0"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "DrawDemoUser?0": {
+            "required": [
+                "id"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "format": "int32",
+                    "description": "",
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "username": {
+                    "description": "Unique username of the user in the system",
+                    "type": "string"
+                }
+            }
+        },
+        "DrawDemoUser?1": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "description": "Unique username of the user in the system",
+                    "type": "string"
+                },
+                "newPassword": {
+                    "description": "The clear new password of the user",
+                    "type": "string"
+                }
+            }
+        },
+        "DrawDemoUser?2": {
+            "type": "object",
+            "properties": {
+                "newPassword": {
+                    "description": "The clear new password of the user",
+                    "maximum": 40,
+                    "minimum": 3,
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

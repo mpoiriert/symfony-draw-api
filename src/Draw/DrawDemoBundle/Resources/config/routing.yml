@@ -1,0 +1,3 @@
+draw_demo_users:
+    resource: "@DrawDemoBundle/Controller/UsersController.php"
+    type: rest

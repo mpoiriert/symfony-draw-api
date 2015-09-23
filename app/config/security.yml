@@ -1,0 +1,42 @@
+security:
+    encoders:
+        Draw\DrawDemoBundle\Entity\User:
+            algorithm: bcrypt
+            cost: 12
+
+    role_hierarchy:
+        ROLE_USER:        "draw:user"
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    providers:
+        draw_demo:
+            id: draw_demo.user_provider
+
+    firewalls:
+        doc:
+            pattern: ^/api-doc
+            stateless: true
+            security: false
+            methods: [GET]
+
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+            stateless: true
+
+        api:
+            pattern:   ^/api/
+            stateless: true
+            security: true
+            anonymous: true
+            lexik_jwt: ~
+
+        oauth_area:
+            oauth:
+                resource_owners:
+                    facebook:           "/login/check-facebook"
+                    google:             "/login/check-google"
+                login_path:        /login
+                oauth_user_provider:
+                    service: draw_demo.user_provider

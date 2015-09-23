@@ -1,0 +1,17 @@
+parameters:
+    draw.serializer.group_hierarchy:
+        "user:create": ["user:write"]
+        "user:update": ["user:write"]
+
+draw_swagger:
+    definitionAliases:
+        -
+            class: Draw\DrawDemoBundle\Entity\User
+            alias: DrawDemoUser
+    schema:
+        info:
+            title: Documentation for the Draw Demo Bundle
+            description: This is a base project using draw bundles and other common bundles to build api
+            termsOfService: N\A
+            contact: ~
+            version: "1.0"
