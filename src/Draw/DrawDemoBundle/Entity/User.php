@@ -45,7 +45,7 @@ class User implements UserInterface, OwnedInterface, OwnerInterface
      *
      * @Assert\Length(min=3, max=40, groups={"persist"})
      *
-     * @Serializer\Groups(groups={"user:read", "user:create"})
+     * @Serializer\Groups(groups={"user:read", "user:write"})
      */
     public $username;
 
@@ -71,6 +71,7 @@ class User implements UserInterface, OwnedInterface, OwnerInterface
      *
      * @Assert\Length(min=3, max=40, groups={"user:write"})
      * @Assert\Type(type="string", groups={"user:write"})
+     * @Assert\NotNull(groups={"user:create"})
      *
      * @Serializer\Type("string")
      * @Serializer\Groups(groups={"user:write"})

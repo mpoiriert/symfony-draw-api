@@ -270,3 +270,6 @@ hwi_oauth:
             type:                facebook
             client_id:           %facebook_app_id%
             client_secret:       %facebook_secret%
+
+        draw_demo:
+            service: draw_demo.user_provider

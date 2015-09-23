@@ -1,3 +1,7 @@
 draw_demo_users:
     resource: "@DrawDemoBundle/Controller/UsersController.php"
     type: rest
+
+draw_demo_tokens:
+    resource: "@DrawDemoBundle/Controller/TokensController.php"
+    type: rest

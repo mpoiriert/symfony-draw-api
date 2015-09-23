@@ -21,7 +21,7 @@ class UsersController extends FOSRestController
      * @Swagger\Tag(name="Users")
      *
      * @Rest\Post("/users", name="create_user")
-     * @Rest\View(serializerGroups={"user:read"})
+     * @Rest\View(serializerGroups={"user:read"}, statusCode=201)
      *
      * @ParamConverter(
      *      "user",
@@ -36,6 +36,7 @@ class UsersController extends FOSRestController
      */
     public function createAction(User $user)
     {
+        $user->password = $this->get("security.password_encoder")->encodePassword($user, $user->newPassword);
         return $this->persistAndFlush($user);
     }
 

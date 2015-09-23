@@ -119,6 +119,48 @@
                     }
                 }
             }
+        },
+        "\/api\/draw-demo\/tokens": {
+            "post": {
+                "tags": [
+                    "Tokens"
+                ],
+                "summary": "Create a access token needed for all secured call",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "required": [
+                                "providerName",
+                                "accessToken"
+                            ],
+                            "type": "object",
+                            "properties": {
+                                "providerName": {
+                                    "description": "",
+                                    "default": "draw_demo",
+                                    "type": "string"
+                                },
+                                "accessToken": {
+                                    "description": "The access token relative to the provider",
+                                    "type": "array",
+                                    "items": {}
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {}
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -141,6 +183,9 @@
             }
         },
         "DrawDemoUser?1": {
+            "required": [
+                "newPassword"
+            ],
             "type": "object",
             "properties": {
                 "username": {
@@ -156,6 +201,10 @@
         "DrawDemoUser?2": {
             "type": "object",
             "properties": {
+                "username": {
+                    "description": "Unique username of the user in the system",
+                    "type": "string"
+                },
                 "newPassword": {
                     "description": "The clear new password of the user",
                     "maximum": 40,

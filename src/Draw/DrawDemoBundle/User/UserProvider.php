@@ -6,7 +6,6 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
-use Draw\DrawDemoBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -25,19 +24,21 @@ class UserProvider implements UserProviderInterface, OAuthAwareUserProviderInter
     /**
      * @var string
      */
-    private $resourceOwnerName = "looklike";
+    private $resourceOwnerName = "draw_demo";
 
     /**
      * @var UserPasswordEncoderInterface
      */
     private $userPasswordEncoder;
 
-    private $resourceOwnerOptions = array(
-        "user_response_class" => 'LookLike\Bundle\LookLikeBundle\User\UserResponse'
-    );
+    private $resourceOwnerOptions = array();
 
     public function __construct(ManagerRegistry $entityManager, UserPasswordEncoderInterface $userPasswordEncoder)
     {
+        $this->resourceOwnerOptions = array(
+            "user_response_class" => __NAMESPACE__ . '\\UserResponse'
+        );
+
         $this->entityManager = $entityManager;
         $this->userPasswordEncoder = $userPasswordEncoder;
     }
@@ -59,23 +60,12 @@ class UserProvider implements UserProviderInterface, OAuthAwareUserProviderInter
      */
     public function loadUserByUsername($username)
     {
-        $user = $this->entityManager->getRepository("LookLikeBundle:User")->findOneBy(array("id" => $username));
+        $user = $this->entityManager->getRepository("DrawDemoBundle:User")->findOneBy(array("id" => $username));
 
         if (!$user) {
             $exception = new UsernameNotFoundException();
             $exception->setUsername($username);
             throw $exception;
-        }
-
-
-        if(!$user->pictureUrl) {
-            $oAuthUser = $this->entityManager->getRepository("LookLikeBundle:OAuthUser")
-                ->findOneBy(['resourceOwnerName' => 'facebook', 'user' => $user]);
-
-            if($oAuthUser) {
-                $user->pictureUrl = 'http://graph.facebook.com/' . $oAuthUser->username . '/picture';
-                $this->entityManager->getManagerForClass("LookLikeBundle:User")->flush($user);
-            }
         }
 
         return $user;
@@ -122,56 +112,8 @@ class UserProvider implements UserProviderInterface, OAuthAwareUserProviderInter
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
-        $resourceOwnerName = $response->getResourceOwner()->getName();
         $username = $response->getUsername();
-
-        $oAuthUser = $this->entityManager->getRepository("LookLikeBundle:OAuthUser")
-            ->findOneBy(compact('resourceOwnerName', 'username'));
-
-        if (is_null($oAuthUser)) {
-            $oAuthUser = $this->createOAuthUser($resourceOwnerName, $username, $this->generateRandomPassword());
-        }
-
-        $user = $oAuthUser->user;
-        if(!$user->pictureUrl && $response->getProfilePicture()) {
-            $user->pictureUrl = $response->getProfilePicture();
-            $this->entityManager->getManagerForClass("LookLikeBundle:OAuthUser")->flush($user);
-        }
-
-        return $oAuthUser->user;
-    }
-
-    private function createOAuthUser($resourceOwnerName, $oAuthUsername, $password)
-    {
-        $user = new User();
-        $user->password = $this->userPasswordEncoder->encodePassword($user, $password);
-
-        $oAuthUser = new OAuthUser();
-        $oAuthUser->resourceOwnerName = $resourceOwnerName;
-        $oAuthUser->username = $oAuthUsername;
-        $oAuthUser->user = $user;
-
-        $manager = $this->entityManager->getManagerForClass("LookLikeBundle:OAuthUser");
-        $manager->persist($oAuthUser);
-        $manager->flush($oAuthUser);
-
-        return $oAuthUser;
-    }
-
-    /**
-     * Returns a $length random string
-     * @param int $length
-     * @return string
-     */
-    private function generateRandomPassword($length = 8)
-    {
-        $characters = '23456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ';
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, strlen($characters) - 1)];
-        }
-
-        return $randomString;
+        return $this->entityManager->getRepository("DrawDemoBundle:User")->findOneBy(compact('username'));
     }
 
     /**
@@ -197,14 +139,10 @@ class UserProvider implements UserProviderInterface, OAuthAwareUserProviderInter
 
         $password = $accessToken['password'];
 
-        $user = $user = $this->entityManager->getRepository("LookLikeBundle:User")
+        $user = $user = $this->entityManager->getRepository("DrawDemoBundle:User")
             ->findOneBy(array("username" => $username));
 
-        if (is_null($user)) {
-            $user = $this->createOAuthUser($this->getName(), $username, $password)->user;
-            $user->username = $accessToken['username'];
-            $this->entityManager->getManagerForClass("LookLikeBundle:OAuthUser")->flush($user);
-        } elseif (!$this->userPasswordEncoder->isPasswordValid($user, $password)) {
+        if(is_null($user) || !$this->userPasswordEncoder->isPasswordValid($user, $password)) {
             throw new AuthenticationException('Password error.');
         }
 
