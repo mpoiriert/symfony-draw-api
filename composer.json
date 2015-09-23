@@ -1,5 +1,5 @@
 {
-    "name": "mpoiriert/symfony-draw-api",
+    "name": "draw/symfony-draw-api",
     "type": "project",
     "description": "Project base for api using draw bundles on symfony",
     "minimum-stability": "dev",
